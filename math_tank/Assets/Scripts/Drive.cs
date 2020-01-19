@@ -6,7 +6,7 @@ using System.Collections;
 public class Drive : MonoBehaviour
 {
     public float speed = 10.0f;
-    public float rotationSpeed = 100.0f;
+    public float rotationSpeed = 0f;
 
     private float energy = 0;
 
@@ -23,7 +23,7 @@ public class Drive : MonoBehaviour
             // By default they are mapped to the arrow keys.
             // The value is in the range -1 to 1
             float translation = Input.GetAxis("Vertical") * speed;
-            float rotation = Input.GetAxis("Horizontal") * rotationSpeed;
+            float rotation = Input.GetAxis("Horizontal") * rotationSpeed * 0;
 
             // Make it move 10 meters per second instead of 10 meters per frame...
             translation *= Time.deltaTime;
@@ -42,6 +42,10 @@ public class Drive : MonoBehaviour
 
     }
 
+    public void SetAngle(int angle)
+    {
+        transform.Rotate(0, 0, -angle);
+    }
     public void AddEnergy(int amount)
     {
         energy = amount;

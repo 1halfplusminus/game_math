@@ -23,7 +23,15 @@ public class Ui : MonoBehaviour
         }
 
     }
+    public void TurnTo(string angle)
+    {
+        int n;
+        if (int.TryParse(angle, out n))
+        {
+            drive.SetAngle(n);
+        }
 
+    }
     // Start is called before the first frame update
     void Start()
     {
