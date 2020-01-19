@@ -12,10 +12,6 @@ public class HolisticDrive : MonoBehaviour
     Vector3 up;
     void Start()
     {
-        var v1 = new Vector3(-2, 10, 0);
-        var v2 = new Vector3(5, 5, 5);
-
-        Debug.Log(Vector3.Cross(v1, v2));
         up = transform.up;
     }
     void Update()
