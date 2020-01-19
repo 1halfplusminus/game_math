@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 // A very simplistic car driving on the x-z plane.
 
