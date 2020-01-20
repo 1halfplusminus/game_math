@@ -13,6 +13,14 @@ public class Drive : MonoBehaviour
     void Start()
     {
         currentPosition = transform.position;
+
+        //TODO TO REMOVE
+
+        var v1 = new Vector3(-0.92f, -0.36f, 0);
+        var v2 = new Vector3(-7.6f, -29.4f, 0.0f);
+
+        var angle = Mathf.Acos(Vector3.Dot(v1, v2) / (v1.magnitude * v2.magnitude));
+        Debug.Log(angle * Mathf.Rad2Deg);
     }
     void Update()
     {
