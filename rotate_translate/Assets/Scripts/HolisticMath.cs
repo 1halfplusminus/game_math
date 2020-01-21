@@ -83,10 +83,6 @@ public class HolisticMath
         }
         var worldup = new Coords(0, 1, 0);
         float worldAngle = HolisticMath.Angle(vector, worldup);
-        /*    var direction = GetNormal(v1 + v2);
-           var angle = Angle(up, direction);
-           var rotate = Rotate(direction, angle, HolisticMath.Cross(up, direction).z < 0);
-           return v1 + (rotate); */
         float angle = Angle(vector, up);
         var rotate = Rotate(vector, angle + worldAngle, HolisticMath.Cross(vector, up).z < 0);
         return position + rotate;
