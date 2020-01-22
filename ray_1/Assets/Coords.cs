@@ -1,7 +1,9 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[Serializable]
 public class Coords
 {
 
@@ -65,13 +67,17 @@ public class Coords
         lineRenderer.startWidth = width;
         lineRenderer.endWidth = width;
     }
-    public static Coords operator *(Coords a, Coords b)
-     => new Coords(a.x * b.x, a.y * b.y, a.z * b.z);
-    public static Coords operator *(Coords a, float b)
-         => new Coords(a.x * b, a.y * b, a.z * b);
-    public static Coords operator -(Coords a, Coords b)
-   => new Coords(a.x - b.x, a.y - b.y, a.z - b.z);
-    public static Coords operator +(Coords a, Coords b)
-=> new Coords(a.x + b.x, a.y + b.y, a.z + b.z);
 
+    static public Coords Perp(Coords v)
+    {
+        return new Coords(-v.y, v.x);
+    }
+    public static Coords operator *(Coords a, Coords b)
+        => new Coords(a.x * b.x, a.y * b.y, a.z * b.z);
+    public static Coords operator *(Coords a, float b)
+        => new Coords(a.x * b, a.y * b, a.z * b);
+    public static Coords operator -(Coords a, Coords b)
+        => new Coords(a.x - b.x, a.y - b.y, a.z - b.z);
+    public static Coords operator +(Coords a, Coords b)
+        => new Coords(a.x + b.x, a.y + b.y, a.z + b.z);
 }
