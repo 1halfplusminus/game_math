@@ -74,6 +74,8 @@ public class Coords
     }
     public static Coords operator *(Coords a, Coords b)
         => new Coords(a.x * b.x, a.y * b.y, a.z * b.z);
+    public static Coords operator /(Coords a, Coords b)
+    => new Coords(a.x / b.x, a.y / b.y, a.z / b.z);
     public static Coords operator *(Coords a, float b)
         => new Coords(a.x * b, a.y * b, a.z * b);
     public static Coords operator -(Coords a, Coords b)

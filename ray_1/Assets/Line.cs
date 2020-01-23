@@ -32,7 +32,17 @@ public class Line
     }
     public float IntersectsAt(Line l)
     {
-        return 0;
+        if (HolisticMath.Dot(Coords.Perp(l.v), v) == 0)
+        {
+            return float.NaN;
+        }
+        var c = l.a - a;
+        var t = HolisticMath.Dot(Coords.Perp(l.v), c) / HolisticMath.Dot(Coords.Perp(l.v), v);
+        if ((t < 0 || t > 1) && type == LineType.SEGMENT)
+        {
+            return float.NaN;
+        }
+        return t;
     }
     public void Draw(float width, Color col)
     {
