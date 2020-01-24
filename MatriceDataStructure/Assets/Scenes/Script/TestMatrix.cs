@@ -9,13 +9,14 @@ public class TestMatrix : MonoBehaviour
     {
         var matrix = new Matrix(new float[][] {
             new float[]{1.0f,2.0f,3.0f},
+            new float[]{0.0f,0.0f,0.0f},
             new float[]{0.0f,0.0f,0.0f}
         });
         var matrix2 = new Matrix(new float[][] {
-            new float[]{1.0f,2.0f,3.0f},
-            new float[]{0.0f,0.0f,0.0f}
+            new float[]{1.0f,0.0f,0.0f},
+            new float[]{0.0f,1.0f,0.0f}
         });
-        var result = matrix + matrix2;
+        var result = matrix * matrix2;
         Debug.Log(
             result
         );
