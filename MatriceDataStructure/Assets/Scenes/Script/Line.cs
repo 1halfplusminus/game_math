@@ -8,7 +8,7 @@ public class Line
     Coords B;
     public Coords v;
 
-    public enum LINETYPE { LINE, SEGMENT, RAY};
+    public enum LINETYPE { LINE, SEGMENT, RAY };
     LINETYPE type;
 
     public Line(Coords _A, Coords _B, LINETYPE _type)
@@ -30,8 +30,8 @@ public class Line
     public Coords Reflect(Coords normal)
     {
 
-        Coords norm = normal.GetNormal();
-        Coords vnorm = v.GetNormal();
+        Coords norm = normal.Normalize();
+        Coords vnorm = v.Normalize();
 
         float d = HolisticMath.Dot(norm, vnorm);
 
@@ -50,16 +50,16 @@ public class Line
         float t = HolisticMath.Dot(normal, p.A - A) / HolisticMath.Dot(normal, v);
         return t;
     }
-    
+
     public float IntersectsAt(Line l)
     {
-        if(HolisticMath.Dot(Coords.Perp(l.v),v) == 0)
+        if (HolisticMath.Dot(Coords.Perp(l.v), v) == 0)
         {
             return float.NaN;
         }
         Coords c = l.A - this.A;
         float t = HolisticMath.Dot(Coords.Perp(l.v), c) / HolisticMath.Dot(Coords.Perp(l.v), v);
-        if((t < 0 || t > 1) && type == LINETYPE.SEGMENT)
+        if ((t < 0 || t > 1) && type == LINETYPE.SEGMENT)
         {
             return float.NaN;
         }

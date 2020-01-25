@@ -1,13 +1,31 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
-public class Coords {
+[Serializable]
+public class Coords
+{
 
     public float x;
     public float y;
     public float z;
 
+    public float w;
+    public Coords(float _X, float _Y, float _Z, float _W)
+    {
+        x = _X;
+        y = _Y;
+        z = _Z;
+        w = _W;
+    }
+    public Coords(Vector3 vecpos, float _W)
+    {
+        x = vecpos.x;
+        y = vecpos.y;
+        z = vecpos.z;
+        w = _W;
+    }
     public Coords(float _X, float _Y)
     {
         x = _X;
@@ -28,8 +46,20 @@ public class Coords {
         y = vecpos.y;
         z = vecpos.z;
     }
-
-    public Coords GetNormal()
+    public float[][] ToFloats()
+    {
+        return new float[][] {
+            new float[]{x},
+            new float[]{y},
+            new float[]{z},
+            new float[]{w}
+        };
+    }
+    public Matrix ToMatrix()
+    {
+        return new Matrix(ToFloats());
+    }
+    public Coords Normalize()
     {
         float magnitude = HolisticMath.Distance(new Coords(0, 0, 0), new Coords(x, y, z));
         return new Coords(x / magnitude, y / magnitude, z / magnitude);
@@ -37,7 +67,7 @@ public class Coords {
 
     public override string ToString()
     {
-        return"(" + x + "," + y + "," + z +")";
+        return "(" + x + "," + y + "," + z + ")";
     }
 
     public Vector3 ToVector()
@@ -45,13 +75,13 @@ public class Coords {
         return new Vector3(x, y, z);
     }
 
-    static public Coords operator+ (Coords a, Coords b)
+    static public Coords operator +(Coords a, Coords b)
     {
         Coords c = new Coords(a.x + b.x, a.y + b.y, a.z + b.z);
         return c;
     }
 
-    static public Coords operator- (Coords a, Coords b)
+    static public Coords operator -(Coords a, Coords b)
     {
         Coords c = new Coords(a.x - b.x, a.y - b.y, a.z - b.z);
         return c;

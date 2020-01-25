@@ -4,6 +4,27 @@ using UnityEngine;
 
 public class HolisticMath
 {
+
+    public struct Rotation
+    {
+        public bool clockwise;
+        public float value;
+
+        public Rotation(float angle)
+        {
+            value = angle;
+            clockwise = true;
+        }
+        public Rotation(float angle, bool clockwise)
+        {
+            value = angle;
+            this.clockwise = clockwise;
+        }
+        public float Angle
+        {
+            get { return (clockwise) ? (2 * Mathf.PI) - value : value; }
+        }
+    }
     static public Coords GetNormal(Coords vector)
     {
         float length = Distance(new Coords(0, 0, 0), vector);
@@ -16,8 +37,8 @@ public class HolisticMath
 
     static public float Distance(Coords point1, Coords point2)
     {
-        float diffSquared = Square(point1.x - point2.x) + 
-                            Square(point1.y - point2.y) + 
+        float diffSquared = Square(point1.x - point2.x) +
+                            Square(point1.y - point2.y) +
                             Square(point1.z - point2.z);
         float squareRoot = Mathf.Sqrt(diffSquared);
         return squareRoot;
@@ -66,7 +87,7 @@ public class HolisticMath
 
     static public Coords Rotate(Coords vector, float angle, bool clockwise) //in radians
     {
-        if(clockwise)
+        if (clockwise)
         {
             angle = 2 * Mathf.PI - angle;
         }
@@ -75,7 +96,43 @@ public class HolisticMath
         float yVal = vector.x * Mathf.Sin(angle) + vector.y * Mathf.Cos(angle);
         return new Coords(xVal, yVal, 0);
     }
-   
+    static public Coords Rotate(Coords vector, Rotation xRotation, Rotation yRotation, Rotation zRotation)
+    {
+        var xRotationMatrix = Matrix.RollXRotationMatrix(xRotation.Angle);
+        var yRotationMatrix = Matrix.RollYRotationMatrix(yRotation.Angle);
+        var zRotationMatrix = Matrix.RollZRotationMatrix(zRotation.Angle);
+        var positionMatrix = vector.ToMatrix();
+        return (zRotationMatrix * yRotationMatrix * zRotationMatrix * positionMatrix).ToCoords();
+    }
+    static public Coords Translate(Coords position, Coords vector)
+    {
+        var translation = Matrix.TranslationMatrix(vector);
+        var coordsMatrix = position.ToMatrix();
+        return (translation * coordsMatrix).ToCoords();
+    }
+    static public Coords Reflect(Coords position)
+    {
+        var reflexion = new Matrix(new float[][]{
+            new float[]{-1.0f,0.0f,0.0f, 0.0f},
+            new float[]{0.0f,1.0f,0.0f, 0.0f},
+            new float[]{0.0f,0.0f,1.0f, 0.0f},
+            new float[]{0.0f,0.0f,0.0f, 1.0f},
+        });
+        var coordsMatrix = position.ToMatrix();
+        return (reflexion * coordsMatrix).ToCoords();
+    }
+    static public Coords Shear(Coords position, Coords vector)
+    {
+        var shear = Matrix.ShearMatrix(vector);
+        var coordsMatrix = position.ToMatrix();
+        return (shear * coordsMatrix).ToCoords();
+    }
+    static public Coords Scale(Coords position, Coords vector)
+    {
+        var scale = Matrix.ScaleMatrix(vector);
+        var coordsMatrix = position.ToMatrix();
+        return (scale * coordsMatrix).ToCoords();
+    }
     static public Coords Translate(Coords position, Coords facing, Coords vector)
     {
         if (HolisticMath.Distance(new Coords(0, 0, 0), vector) <= 0) return position;
