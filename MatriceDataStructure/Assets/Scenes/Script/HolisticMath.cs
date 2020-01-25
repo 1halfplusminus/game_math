@@ -24,6 +24,7 @@ public class HolisticMath
         {
             get { return (clockwise) ? (2 * Mathf.PI) - value : value; }
         }
+
     }
     static public Coords GetNormal(Coords vector)
     {
@@ -84,7 +85,29 @@ public class HolisticMath
         Coords newDir = HolisticMath.Rotate(forwardVector, angle, clockwise);
         return newDir;
     }
+    static public Matrix GetRotationMatrix(Rotation xRotation, Rotation yRotation, Rotation zRotation)
+    {
+        var xRotationMatrix = Matrix.RollXRotationMatrix(xRotation.Angle);
+        var yRotationMatrix = Matrix.RollYRotationMatrix(yRotation.Angle);
+        var zRotationMatrix = Matrix.RollZRotationMatrix(zRotation.Angle);
+        return zRotationMatrix * yRotationMatrix * xRotationMatrix;
+    }
+    static public float GetRotationAngle(Matrix rotation)
+    {
+        return Mathf.Acos(0.5f * (rotation.Value(0, 0) + rotation.Value(1, 1) + rotation.Value(2, 2) + rotation.Value(3, 3) - 2));
+    }
 
+    static public Coords GetRotationAxis(Matrix rotation, float angle)
+    {
+        if (angle != 0)
+        {
+            float vx = (rotation.Value(2, 1) - rotation.Value(1, 2)) / (2 * Mathf.Sin(angle));
+            float vy = (rotation.Value(0, 2) - rotation.Value(2, 0)) / (2 * Mathf.Sin(angle));
+            float vz = (rotation.Value(1, 0) - rotation.Value(0, 1)) / (2 * Mathf.Sin(angle)); ;
+            return new Coords(vx, vy, vz, 0);
+        }
+        return new Coords(0, 0, 0, 0);
+    }
     static public Coords Rotate(Coords vector, float angle, bool clockwise) //in radians
     {
         if (clockwise)
@@ -109,6 +132,21 @@ public class HolisticMath
         var translation = Matrix.TranslationMatrix(vector);
         var coordsMatrix = position.ToMatrix();
         return (translation * coordsMatrix).ToCoords();
+    }
+    static public Coords QRotate(Coords vector, Coords axis, float angle) //in deg
+    {
+        Coords aN = axis.Normalize();
+        float s = Mathf.Sin(angle * Mathf.Deg2Rad / 2);
+        float w = Mathf.Cos(angle * Mathf.Deg2Rad / 2);
+        Coords q = new Coords(aN.x * s, aN.y * s, aN.z * s, w);
+        var qRotateMatrix = new Matrix(new float[][]{
+            new float[]{1 - 2 * q.y* q.y - 2*q.z*q.z, 2*q.x*q.y - 2*q.w*q.z, 2*q.x*q.z + 2*q.w*q.y, 0},
+            new float[]{2*q.x*q.y + 2*q.w*q.z, 1 - 2*q.x*q.x - 2*q.z*q.z,2*q.y*q.z - 2*q.w*q.x, 0},
+            new float[]{2*q.x*q.z - 2*q.w*q.y, 2*q.y*q.z+ 2*q.w*q.x,1- 2 * q.x*q.x - 2*q.y*q.y, 0},
+            new float[]{0,0,0,1},
+        });
+
+        return (qRotateMatrix * vector.ToMatrix()).ToCoords();
     }
     static public Coords Reflect(Coords position)
     {

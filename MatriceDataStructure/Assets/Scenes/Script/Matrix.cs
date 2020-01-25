@@ -11,6 +11,11 @@ public class Matrix
     {
         this.values = (float[][])values.Clone();
     }
+
+    public float Value(int row, int col)
+    {
+        return values[row][col];
+    }
     public Coords ToCoords()
     {
         if (RowLength == 4 && ColumnLength == 1)
